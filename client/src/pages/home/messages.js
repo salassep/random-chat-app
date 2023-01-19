@@ -13,24 +13,24 @@ const ReceivedMessage = () => {
 
   messagesReceived = [  
     {
+      isReceived: true,
       message: "tes message",
       username: "tes user",
       __createdTime__: Date.now()
-    }
+    },
+    {
+      isReceived: false,
+      message: "tes message",
+      username: "tes user",
+      __createdTime__: Date.now()
+    },
   ]
 
   return (
     <div className={styles.messagesColumn} ref={messagesColumnRef}>
       {messagesReceived.map((msg, i) => (
-        <div className={styles.message} key={i}>
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <span className={styles.msgMeta}>{ msg.username }</span>
-            <span className={styles.msgMeta}>
-              {formatDateFromTimestamp(msg.__createdTime__ || msg.__createdtime__)}
-            </span>
-          </div>
+        <div className={styles.message + " " + (msg.isReceived ? styles.messageReceived : "")} key={i}>
           <p className={styles.msgText}>{msg.message}</p>
-          <br />
         </div>
       ))}
     </div>
