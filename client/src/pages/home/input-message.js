@@ -1,3 +1,4 @@
+import '../../App.css';
 import { useState } from 'react';
 import styles from './styles.module.css';
 
@@ -12,7 +13,7 @@ const SendMessage = () => {
       onChange={(e) => setMessage(e.target.value)}
       value={message}
     />
-    <button className='btn btn-primary' onClick={ "todo" }>
+    <button className='btn btn-primary' onClick={ () => console.log("tes") }>
       Send Message
     </button>
   </div>
