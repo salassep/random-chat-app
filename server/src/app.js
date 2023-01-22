@@ -4,9 +4,8 @@ import cors from 'cors';
 import http from 'http';
 import { Server } from 'socket.io';
 
-import { disconnectUser } from './utils/disconnect-user.js';
-import { connectUser } from './utils/connect-user.js';
-import { findChannel, isFriendReady } from './utils/match-user.js';
+import { connectUser, disconnectUser, findUserDetails } from './utils/users.js';
+import { findChannel, isFriendReady, leaveChannel } from './utils/channels.js';
 
 dotenv.config();
 
@@ -22,15 +21,14 @@ const io = new Server(server, {
   },
 });
 
-let userCount = 0;
 let onlineUsers = [];
 const channels = Array.from({length: 10}, (_, i) => i = []);
 
 io.on('connection', (socket) => {
   
-  connectUser(onlineUsers, socket.id);
-
   const channel = findChannel(channels, socket.id);
+  
+  connectUser(onlineUsers, socket.id, channel);
 
   if (!channel) {
     console.log("Server at capacity!");
@@ -49,10 +47,16 @@ io.on('connection', (socket) => {
     isFriendReady: isFriendReady(channels, channel),
   });
 
-  console.log(channels);
-
   socket.on("disconnect", () => {
-    disconnectUser(onlineUsers, socket.id);
+    const userDetails = findUserDetails(onlineUsers, socket.id);
+    disconnectUser(onlineUsers, userDetails.userIndex);
+    leaveChannel(channels, channel, socket.id);
+
+    socket.to(channel).emit('find_friend', {
+      channelId: channel,
+      isFriendReady: isFriendReady(channels, channel),
+    });
+
   });
 });
 

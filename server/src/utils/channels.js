@@ -9,4 +9,8 @@ export function findChannel(channels, userId) {
 
 export function isFriendReady(channels, channelId) {
   return channels[channelId-1].length === 2; 
+} 
+
+export function leaveChannel(channels, channelId, userId) {
+  channels[channelId - 1] = channels[channelId - 1].filter((user) => user !== userId);
 }
