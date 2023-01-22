@@ -13,7 +13,9 @@ function App() {
           <Route 
             path='/'
             element={
-              <Home />
+              <Home 
+                socket={socket}
+              />
             }
           />
         </Routes>
