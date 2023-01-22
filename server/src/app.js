@@ -6,6 +6,7 @@ import { Server } from 'socket.io';
 
 import { disconnectUser } from './utils/disconnect-user.js';
 import { connectUser } from './utils/connect-user.js';
+import { findChannel, isFriendReady } from './utils/match-user.js';
 
 dotenv.config();
 
@@ -23,15 +24,35 @@ const io = new Server(server, {
 
 let userCount = 0;
 let onlineUsers = [];
+const channels = Array.from({length: 10}, (_, i) => i = []);
 
 io.on('connection', (socket) => {
   
   connectUser(onlineUsers, socket.id);
-  console.log(onlineUsers);
+
+  const channel = findChannel(channels, socket.id);
+
+  if (!channel) {
+    console.log("Server at capacity!");
+    return;
+  }
+
+  socket.join(channel);
+
+  socket.to(channel).emit('find_friend', {
+    channelId: channel,
+    isFriendReady: isFriendReady(channels, channel),
+  });
+
+  socket.emit('find_friend', {
+    channelId: channel,
+    isFriendReady: isFriendReady(channels, channel),
+  });
+
+  console.log(channels);
 
   socket.on("disconnect", () => {
-    onlineUsers = disconnectUser(onlineUsers, socket.id);
-    console.log(onlineUsers);
+    disconnectUser(onlineUsers, socket.id);
   });
 });
 

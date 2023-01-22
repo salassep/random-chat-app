@@ -4,6 +4,4 @@ export function connectUser(users, userId) {
     userId,
     chatWith: null,
   });
-
-  return users;
 }
