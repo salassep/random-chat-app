@@ -28,12 +28,12 @@ io.on('connection', (socket) => {
   
   const channel = findChannel(channels, socket.id);
   
-  connectUser(onlineUsers, socket.id, channel);
-
   if (!channel) {
     console.log("Server at capacity!");
     return;
   }
+
+  connectUser(onlineUsers, socket.id, channel);
 
   socket.join(channel);
 
@@ -47,6 +47,8 @@ io.on('connection', (socket) => {
     isFriendReady: isFriendReady(channels, channel),
   });
 
+  console.log(channels);
+
   socket.on("disconnect", () => {
     const userDetails = findUserDetails(onlineUsers, socket.id);
     disconnectUser(onlineUsers, userDetails.userIndex);
@@ -56,7 +58,6 @@ io.on('connection', (socket) => {
       channelId: channel,
       isFriendReady: isFriendReady(channels, channel),
     });
-
   });
 });
 
