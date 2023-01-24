@@ -70,11 +70,6 @@ io.on('connection', (socket) => {
           message:"Hi, there!",
           createdTime: Date.now(),
         });
-        io.in(channelId).emit('receive_message', {
-          isSender: false,
-          message:"Hi, there!",
-          createdTime: Date.now(),
-        });
       }, 3000);
     }
   };
@@ -112,10 +107,22 @@ io.on('connection', (socket) => {
         createdTime: Date.now(),
       });
 
-      setTimeout(() => {
-        socket.to(chat.channelId).emit("skipped");
-        socket.leave(chat.channelId);
-      }, 3000)
+      const delayedFunction = () => new Promise(
+        resolve => setTimeout(() => {
+          socket.to(chat.channelId).emit('find_friend', {
+            channelId: chat.channelId,
+            isReadyToChat: false,
+          });
+          resolve();
+        }, 3000)
+      );
+
+      delayedFunction().then(() => {
+        setTimeout(() => {
+          socket.to(chat.channelId).emit("skipped");
+          socket.leave(chat.channelId);
+        }, 3000);
+      });
 
     }).filter((chat) => chat);
   });
