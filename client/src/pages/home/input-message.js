@@ -2,8 +2,16 @@ import '../../App.css';
 import { useState } from 'react';
 import styles from './styles.module.css';
 
-const SendMessage = () => {
+const SendMessage = ({socket, channelId}) => {
   const [message, setMessage] = useState();
+
+  const sendMessage = () => {
+    if (message) {
+      const createdTime = Date.now();
+      socket.emit('send_message', { channelId, message, createdTime });
+      setMessage('');
+    }
+  }
 
   return (
     <div className={styles.sendMessageContainer}>
@@ -13,8 +21,8 @@ const SendMessage = () => {
       onChange={(e) => setMessage(e.target.value)}
       value={message}
     />
-    <button className='btn btn-primary' onClick={ () => console.log("tes") }>
-      Send Message
+    <button className='btn btn-primary' onClick={sendMessage}>
+      {'>'}
     </button>
   </div>
   );

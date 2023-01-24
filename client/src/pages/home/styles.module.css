@@ -2,17 +2,17 @@
 .messagesColumn {
   display: flex;
   margin: auto;
-  max-width: 900px;
+  width: 85%;
   height: 85vh;
   overflow: auto;
-  padding: 10px;
+  padding: 10px 0;
   flex-direction: column;
   justify-content: end;
 }
 
 .message {
   overflow-wrap: break-word;
-  background: rgb(114, 147, 255);
+  background: rgb(138, 128, 229);
   border-radius: 6px;
   margin-bottom: 15px;
   max-width: 400px;
@@ -21,7 +21,7 @@
 
 .messageReceived {
   margin: 0px 0px 15px auto;
-  background: rgb(77, 170, 48);
+  background: rgb(151, 109, 201);
 }
 
 .msgMeta {
@@ -36,14 +36,22 @@
 
 /* Message input and button */
 .sendMessageContainer {
+  display: flex;
+  justify-content: center;
+  text-align: center;
   margin: auto;
-  max-width: 950px;
-  padding: 16px 20px 20px 16px;
+  width: 85%;
+  padding-top: 20px;
 }
+
+.sendMessageContainer button {
+  width: 5%;
+}
+
 .messageInput {
   padding: 14px;
-  margin-right: 16px;
-  width: 80%;
+  width: 95%;
+  margin-right: 10px;
   border-radius: 6px;
   border: 1px solid rgb(153, 217, 234);
   font-size: 0.9rem;

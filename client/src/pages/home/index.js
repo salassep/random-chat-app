@@ -25,7 +25,10 @@ const Home = ({socket}) => {
       { friend.isReadyToChat
         ? <div>
             <ReceivedMessage socket={socket} />
-            <SendMessage />
+            <SendMessage 
+              socket={socket}
+              channelId={friend.channelId}
+            />
           </div> 
         : <div style={
             { 
