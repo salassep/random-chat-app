@@ -3,9 +3,10 @@ import express from 'express';
 import cors from 'cors';
 import http from 'http';
 import { Server } from 'socket.io';
+import { nanoid } from 'nanoid';
 
-import { connectUser, disconnectUser, findUserDetails } from './utils/users.js';
-import { findChannel, isFriendReady, leaveChannel } from './utils/channels.js';
+// import { connectUser, disconnectUser, findUserDetails } from './utils/users.js';
+// import { findChannel, isFriendReady, leaveChannel } from './utils/channels.js';
 
 dotenv.config();
 
@@ -21,43 +22,86 @@ const io = new Server(server, {
   },
 });
 
-let onlineUsers = [];
-const channels = Array.from({length: 10}, (_, i) => i = []);
+let chats = [
+  // {
+  //   channelId: 2222,
+  //   isReadyToChat: false,
+  //   messages: [],
+  // },
+  // {
+  //   channelId: 1111,
+  //   isReadyToChat: true,
+  //   messages: [],
+  // },
+];
+
+// {
+//   channelId = 123412,
+//   isReadyToChat = false
+//   messages = [{
+//     sender: 123123,
+//     message: "blablablba",
+//   }];
+// }
 
 io.on('connection', (socket) => {
+  const findFriend = () => {
+    let channelIdIndex = chats.findIndex((channel) => !channel.isReadyToChat);
   
-  const channel = findChannel(channels, socket.id);
+    if (channelIdIndex < 0) {
+      const channelId = nanoid();
+      const isReadyToChat = false;
   
-  if (!channel) {
-    console.log("Server at capacity!");
-    return;
-  }
+      chats.push({
+        channelId,
+        isReadyToChat,
+        users: [socket.id],
+        messages: []
+      });
+  
+      socket.join(channelId);
+    
+      socket.emit('find_friend', {
+        channelId,
+        isReadyToChat,
+      });
+  
+    } else {
+      chats[channelIdIndex].isReadyToChat = true;
+      chats[channelIdIndex].users.push(socket.id);
+  
+      const {channelId, isReadyToChat} = chats[channelIdIndex];
+  
+      socket.join(channelId);
+  
+      socket.to(channelId).emit('find_friend', {
+        channelId,
+        isReadyToChat,
+      });
+    
+      socket.emit('find_friend', {
+        channelId,
+        isReadyToChat,
+      });
+  
+    }
+  };
 
-  connectUser(onlineUsers, socket.id, channel);
+  findFriend();
 
-  socket.join(channel);
-
-  socket.to(channel).emit('find_friend', {
-    channelId: channel,
-    isFriendReady: isFriendReady(channels, channel),
+  socket.on('refind_friend', () => {
+    findFriend();
   });
-
-  socket.emit('find_friend', {
-    channelId: channel,
-    isFriendReady: isFriendReady(channels, channel),
-  });
-
-  console.log(channels);
 
   socket.on("disconnect", () => {
-    const userDetails = findUserDetails(onlineUsers, socket.id);
-    disconnectUser(onlineUsers, userDetails.userIndex);
-    leaveChannel(channels, channel, socket.id);
-
-    socket.to(channel).emit('find_friend', {
-      channelId: channel,
-      isFriendReady: isFriendReady(channels, channel),
-    });
+    console.log(socket.id, "disconnected")
+    chats = chats.map((chat) => {
+      if (!chat.users.includes(socket.id)) {
+        return chat;
+      }
+      socket.to(chat.channelId).emit("skipped");
+      socket.leave(chat.channelId);
+    }).filter((chat) => chat);
   });
 });
 

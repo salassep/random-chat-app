@@ -6,28 +6,24 @@ const Home = ({socket}) => {
   const [friend, setFriend] = useState([]);
 
   useEffect(() => {
-    let isFriendReady;
     socket.on('find_friend', (data) => {
-      isFriendReady = data.isFriendReady;
-      const check = setInterval(() => {
-        if (isFriendReady) {
-          clearInterval(check);
-        }
-        socket.emit("need_friend", data);
-      }, 5000);
-
+      console.log(data);
       setFriend(data);
-
-      return () => {
-        socket.off('find_friend');
-        socket.off('need_friend');
-      };
     });
+
+    socket.on('skipped', () => {
+      socket.emit("refind_friend");
+    });
+
+    return () => {
+      socket.off('find_friend');
+      socket.on('skipped');
+    };
   }, [socket]);
 
   return (
     <div>
-      { friend.isFriendReady 
+      { friend.isReadyToChat
         ? <div>
             <ReceivedMessage />
             <SendMessage />
