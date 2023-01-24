@@ -41,12 +41,21 @@ const ReceivedMessage = ({ socket }) => {
   }
 
   return (
-    <div className={styles.messagesColumn} ref={messagesColumnRef}>
-      {messagesReceived.map((msg, i) => (
-        <div className={styles.message + " " + (msg.isSender ? "" : styles.messageReceived)} key={i}>
-          <p className={styles.msgText}>{msg.message}</p>
-        </div>
-      ))}
+    <div ref={messagesColumnRef} style={{ 
+      height: '85vh', 
+      display: 'grid', 
+      gridTemplateRows: '1fr', 
+      overflow: 'auto', 
+      width: '85%', 
+      margin: 'auto',
+    }}>
+      <div className={styles.messagesColumn}>
+        {messagesReceived.map((msg, i) => (
+          <div className={styles.message + " " + (msg.isSender ? "" : styles.messageReceived)} key={i}>
+            <p className={styles.msgText}>{msg.message}</p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
