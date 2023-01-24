@@ -22,27 +22,7 @@ const io = new Server(server, {
   },
 });
 
-let chats = [
-  // {
-  //   channelId: 2222,
-  //   isReadyToChat: false,
-  //   messages: [],
-  // },
-  // {
-  //   channelId: 1111,
-  //   isReadyToChat: true,
-  //   messages: [],
-  // },
-];
-
-// {
-//   channelId = 123412,
-//   isReadyToChat = false
-//   messages = [{
-//     sender: 123123,
-//     message: "blablablba",
-//   }];
-// }
+let chats = [];
 
 io.on('connection', (socket) => {
   const findFriend = () => {
@@ -83,7 +63,14 @@ io.on('connection', (socket) => {
         channelId,
         isReadyToChat,
       });
-  
+
+      const createdTime = Date.now();
+
+      socket.to(channelId).emit('receive_message', {
+        isSender: false,
+        message:"tes",
+        createdTime: createdTime,
+      });
     }
   };
 
@@ -91,6 +78,20 @@ io.on('connection', (socket) => {
 
   socket.on('refind_friend', () => {
     findFriend();
+  });
+
+  socket.on('send_message', (data) => {
+    const { message, channelId, createdTime } = data;
+
+    const channelIndex = chats.findIndex((chat) => chat.channelId === channelId);
+
+    chats[channelIndex].messages.push({
+      sender: socket.id,
+      message,
+      createdTime,
+    });
+
+    console.log(chats);
   });
 
   socket.on("disconnect", () => {

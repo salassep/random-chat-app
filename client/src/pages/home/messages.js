@@ -1,35 +1,50 @@
 import styles from './styles.module.css';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
-const ReceivedMessage = () => {
+const ReceivedMessage = ({ socket }) => {
   let [messagesReceived, setMessagesReceived] = useState([]);
 
   const messagesColumnRef = useRef(null);
 
-  function formatDateFromTimestamp(timestamp) {
-    const date = new Date(timestamp);
-    return date.toLocaleString();
-  }
+  useEffect(() => {
+    socket.on('receive_message', (data) => {
+      console.log(data);
+      setMessagesReceived((state) => [
+        ...state,
+        {
+          isSender: data.isSender,
+          message: data.message,
+          createdTime: data.createdTime,
+        }
+      ]);
+    });
 
-  messagesReceived = [  
-    {
-      isReceived: true,
-      message: "tes message",
-      username: "tes user",
-      __createdTime__: Date.now()
-    },
-    {
-      isReceived: false,
-      message: "tes message",
-      username: "tes user",
-      __createdTime__: Date.now()
-    },
-  ]
+    return () => socket.off('receive_message');
+  }, [socket]);
+
+  useEffect(() => {
+    socket.on('recent_messages', (messages) => {
+      const sortMessages = sortMessagesByDate(JSON.parse(messages));
+      setMessagesReceived((state) => [...sortMessages,  ...state]);
+    });
+
+    return () => socket.off('recent_messages');
+  }, [socket]);
+
+  useEffect(() => {
+    messagesColumnRef.current.scrollTop = messagesColumnRef.current.scrollHeight;
+  }, [messagesReceived]);
+
+  function sortMessagesByDate(messages) {
+    return messages.sort(
+      (a, b) => parseInt(a.createdTime) - parseInt(b.createdTime)
+    );
+  }
 
   return (
     <div className={styles.messagesColumn} ref={messagesColumnRef}>
       {messagesReceived.map((msg, i) => (
-        <div className={styles.message + " " + (msg.isReceived ? styles.messageReceived : "")} key={i}>
+        <div className={styles.message + " " + (msg.isSender ? styles.messageReceived : "")} key={i}>
           <p className={styles.msgText}>{msg.message}</p>
         </div>
       ))}
