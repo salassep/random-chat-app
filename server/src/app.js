@@ -53,7 +53,7 @@ io.on('connection', (socket) => {
       const {channelId, isReadyToChat} = chats[channelIdIndex];
   
       socket.join(channelId);
-  
+
       socket.to(channelId).emit('find_friend', {
         channelId,
         isReadyToChat,
@@ -64,13 +64,18 @@ io.on('connection', (socket) => {
         isReadyToChat,
       });
 
-      const createdTime = Date.now();
-
-      socket.to(channelId).emit('receive_message', {
-        isSender: false,
-        message:"tes",
-        createdTime: createdTime,
-      });
+      setTimeout(() => {
+        io.in(channelId).emit('receive_message', {
+          isSender: false,
+          message:"Hi, there!",
+          createdTime: Date.now(),
+        });
+        io.in(channelId).emit('receive_message', {
+          isSender: false,
+          message:"Hi, there!",
+          createdTime: Date.now(),
+        });
+      }, 3000);
     }
   };
 
@@ -100,8 +105,18 @@ io.on('connection', (socket) => {
       if (!chat.users.includes(socket.id)) {
         return chat;
       }
-      socket.to(chat.channelId).emit("skipped");
-      socket.leave(chat.channelId);
+
+      socket.to(chat.channelId).emit('receive_message', {
+        isSender: false,
+        message:"I am leaving!",
+        createdTime: Date.now(),
+      });
+
+      setTimeout(() => {
+        socket.to(chat.channelId).emit("skipped");
+        socket.leave(chat.channelId);
+      }, 3000)
+
     }).filter((chat) => chat);
   });
 });

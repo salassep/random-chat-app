@@ -7,7 +7,6 @@ const Home = ({socket}) => {
 
   useEffect(() => {
     socket.on('find_friend', (data) => {
-      console.log(data);
       setFriend(data);
     });
 
@@ -17,7 +16,7 @@ const Home = ({socket}) => {
 
     return () => {
       socket.off('find_friend');
-      socket.on('skipped');
+      socket.off('skipped');
     };
   }, [socket]);
 

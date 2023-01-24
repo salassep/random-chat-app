@@ -1,24 +1,29 @@
 /* Messages */
 .messagesColumn {
+  display: flex;
   margin: auto;
   max-width: 900px;
   height: 85vh;
   overflow: auto;
   padding: 10px;
-}
-
-.messageReceived {
-  margin: 0px 0px 0px auto;
+  flex-direction: column;
+  justify-content: end;
 }
 
 .message {
   overflow-wrap: break-word;
   background: rgb(114, 147, 255);
   border-radius: 6px;
-  margin-bottom: 24px;
+  margin-bottom: 15px;
   max-width: 400px;
-  padding: 12px;
+  padding: 0px 12px;
 }
+
+.messageReceived {
+  margin: 0px 0px 15px auto;
+  background: rgb(77, 170, 48);
+}
+
 .msgMeta {
   color: #fff;
   font-size: 0.75rem;

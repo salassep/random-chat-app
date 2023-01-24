@@ -19,7 +19,7 @@ const ReceivedMessage = ({ socket }) => {
       ]);
     });
 
-    return () => socket.off('receive_message');
+    return () => { socket.off('receive_message'); }
   }, [socket]);
 
   useEffect(() => {
@@ -44,7 +44,7 @@ const ReceivedMessage = ({ socket }) => {
   return (
     <div className={styles.messagesColumn} ref={messagesColumnRef}>
       {messagesReceived.map((msg, i) => (
-        <div className={styles.message + " " + (msg.isSender ? styles.messageReceived : "")} key={i}>
+        <div className={styles.message + " " + (msg.isSender ? "" : styles.messageReceived)} key={i}>
           <p className={styles.msgText}>{msg.message}</p>
         </div>
       ))}
