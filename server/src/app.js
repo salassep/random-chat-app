@@ -83,15 +83,17 @@ io.on('connection', (socket) => {
   socket.on('send_message', (data) => {
     const { message, channelId, createdTime } = data;
 
-    const channelIndex = chats.findIndex((chat) => chat.channelId === channelId);
-
-    chats[channelIndex].messages.push({
-      sender: socket.id,
+    socket.to(channelId).emit('receive_message', {
+      isSender: false,
       message,
       createdTime,
     });
 
-    console.log(chats);
+    socket.emit('receive_message', {
+      isSender: true,
+      message,
+      createdTime,
+    });
   });
 
   socket.on("disconnect", () => {
