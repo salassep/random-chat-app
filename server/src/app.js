@@ -1,17 +1,24 @@
+import * as dotenv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
 import http from 'http';
 import { Server } from 'socket.io';
 import { nanoid } from 'nanoid';
 
+dotenv.config();
+
 const app = express();
 const server = http.createServer(app);
 
 app.use(cors());
 
+const SOCKET_CLIENT = process.env.SOCKET_CLIENT || "localhost";
+const SOCKET_CLIENT_PORT = process.env.SOCKET_CLIENT_PORT || 3000;
+const PORT = process.env.PORT || 4000;
+
 const io = new Server(server, {
   cors: {
-    origin: 'http://localhost:3000',
+    origin: `http://${SOCKET_CLIENT}:${SOCKET_CLIENT_PORT}`,
     methods: ['GET', 'POST'],
   },
 });
@@ -125,6 +132,6 @@ io.on('connection', (socket) => {
 });
 
 
-server.listen(4000, () => {
-  console.log("Server running on port 4000");
+server.listen(PORT, () => {
+  console.log("Server running on port", PORT);
 });
