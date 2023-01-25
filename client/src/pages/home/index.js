@@ -1,3 +1,4 @@
+import styles from './styles.module.css';
 import ReceivedMessage from './messages';
 import SendMessage from './input-message';
 import { useEffect, useState } from 'react';
@@ -30,16 +31,8 @@ const Home = ({socket}) => {
               channelId={friend.channelId}
             />
           </div> 
-        : <div style={
-            { 
-              height: '100vh', 
-              display: 'flex', 
-              justifyContent: 'center', 
-              flexDirection: 'column',
-              textAlign: 'center'
-            }
-          }>
-            <span style={{ fontWeight: 'bold', fontStyle: 'italic' }}>Looking For Friend ...</span>
+        : <div className={styles.centerInformation}>
+            <span className={styles.textInformation}>Looking For Friend ...</span>
           </div>
       }
     </div>

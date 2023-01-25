@@ -1,4 +1,26 @@
+.centerInformation {
+  height: 100vh; 
+  display: flex; 
+  justify-content: center; 
+  flex-direction: column;
+  text-align: center;
+}
+
+.textInformation {
+  font-weight: bold;
+  font-style: italic;
+}
+
 /* Messages */
+.chatContainer {
+  height: 85vh;
+  display: grid; 
+  grid-template-rows: 1fr; 
+  overflow: auto; 
+  width: 85%; 
+  margin: auto;
+}
+
 .messagesColumn {
   display: flex;
   margin: auto;

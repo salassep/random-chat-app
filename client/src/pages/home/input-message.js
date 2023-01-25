@@ -11,7 +11,13 @@ const SendMessage = ({socket, channelId}) => {
       socket.emit('send_message', { channelId, message, createdTime });
       setMessage('');
     }
-  }
+  };
+
+  const onKeyDownHandler = (e) => {
+    if (e.key === "Enter") {
+      sendMessage();
+    };
+  };
 
   return (
     <div className={styles.sendMessageContainer}>
@@ -20,6 +26,7 @@ const SendMessage = ({socket, channelId}) => {
       placeHolder='Message...'
       onChange={(e) => setMessage(e.target.value)}
       value={message}
+      onKeyDown={onKeyDownHandler}
     />
     <button className='btn btn-primary' onClick={sendMessage}>
       {'>'}
