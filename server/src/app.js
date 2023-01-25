@@ -1,14 +1,8 @@
-import dotenv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
 import http from 'http';
 import { Server } from 'socket.io';
 import { nanoid } from 'nanoid';
-
-// import { connectUser, disconnectUser, findUserDetails } from './utils/users.js';
-// import { findChannel, isFriendReady, leaveChannel } from './utils/channels.js';
-
-dotenv.config();
 
 const app = express();
 const server = http.createServer(app);
@@ -70,7 +64,7 @@ io.on('connection', (socket) => {
           message:"Hi, there!",
           createdTime: Date.now(),
         });
-      }, 3000);
+      }, 1000);
     }
   };
 
