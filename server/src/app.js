@@ -55,23 +55,25 @@ io.on('connection', (socket) => {
   
       socket.join(channelId);
 
-      socket.to(channelId).emit('find_friend', {
-        channelId,
-        isReadyToChat,
-      });
+      setTimeout(() => {
+        socket.to(channelId).emit('find_friend', {
+          channelId,
+          isReadyToChat,
+        });
+  
+        socket.emit('find_friend', {
+          channelId,
+          isReadyToChat,
+        });
+      }, 1000)
     
-      socket.emit('find_friend', {
-        channelId,
-        isReadyToChat,
-      });
-
       setTimeout(() => {
         io.in(channelId).emit('receive_message', {
           isSender: false,
           message:"Hi, there!",
           createdTime: Date.now(),
         });
-      }, 1000);
+      }, 2000);
     }
   };
 
