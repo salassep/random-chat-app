@@ -28,7 +28,7 @@ const Home = ({socket}) => {
   return (
     <div>
       { friend.isReadyToChat
-        ? <div>
+        ? <div className={styles.container}>
             <ReceivedMessage socket={socket} />
             <SendMessage 
               socket={socket}

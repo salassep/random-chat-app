@@ -11,10 +11,16 @@
   font-style: italic;
 }
 
+.container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
 /* Messages */
 .chatContainer {
-  height: 85vh;
   display: grid; 
+  height: 85%;
   grid-template-rows: 1fr; 
   overflow: auto; 
   width: 85%; 
@@ -103,6 +109,7 @@
   display: block;
   margin: auto;
   margin-top: 16px;
+  margin-bottom: 24px;
   background-color: white;
   outline: none;
   border: none;
