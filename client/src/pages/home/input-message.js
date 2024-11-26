@@ -20,18 +20,28 @@ const SendMessage = ({socket, channelId}) => {
   };
 
   return (
-    <div className={styles.sendMessageContainer}>
-      <input 
-        className={styles.messageInput}
-        placeholder='Message...'
-        onChange={(e) => setMessage(e.target.value)}
-        value={message}
-        onKeyDown={onKeyDownHandler}
-      />
-      <button className='btn btn-primary' onClick={sendMessage}>
-        {'>'}
-      </button>
-    </div>
+    <>
+      <div className={styles.cautionText}>
+        <span>
+          *
+        </span>
+        <p>
+          Do not share your confidential information; the website owner is not responsible for user negligence.
+        </p>
+      </div>
+      <div className={styles.sendMessageContainer}>
+        <input 
+          className={styles.messageInput}
+          placeholder='Message...'
+          onChange={(e) => setMessage(e.target.value)}
+          value={message}
+          onKeyDown={onKeyDownHandler}
+        />
+        <button className='btn btn-primary' onClick={sendMessage}>
+          {'>'}
+        </button>
+      </div>
+    </>
   );
 };
 

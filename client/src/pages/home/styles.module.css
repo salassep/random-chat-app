@@ -64,7 +64,6 @@
   text-align: center;
   margin: auto;
   width: 85%;
-  padding-top: 20px;
 }
 
 .sendMessageContainer button {
@@ -82,4 +81,20 @@
 
 .messageInput:focus {
   outline-color: #7293ff;
+}
+
+.cautionText {
+  display: flex;
+  width: 85%;
+  margin: auto;
+  margin-top: 12px;
+  margin-bottom: 8px;
+  font-size: 0.800rem;
+  line-height: 1.10rem;
+  color: rgb(56, 56, 56);
+  gap: 4px;
+}
+
+.cautionText p {
+  margin: 0;
 }
