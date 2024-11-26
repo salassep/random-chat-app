@@ -1,0 +1,12 @@
+services:
+  - name: express-app
+    type: web
+    runtime: node
+    plan: free # Change this to 'starter' or 'pro' for production-grade
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: SOCKET_CLIENT
+        value: http://localhost:3000
+      - key: PORT
+        value: 4000 # Render uses a dynamically assigned PORT, so ensure Express listens to this value

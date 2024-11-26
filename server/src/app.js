@@ -12,13 +12,11 @@ const server = http.createServer(app);
 
 app.use(cors());
 
-const SOCKET_CLIENT = process.env.SOCKET_CLIENT || "localhost";
-const SOCKET_CLIENT_PORT = process.env.SOCKET_CLIENT_PORT || 3000;
 const PORT = process.env.PORT || 4000;
 
 const io = new Server(server, {
   cors: {
-    origin: `http://${SOCKET_CLIENT}:${SOCKET_CLIENT_PORT}`,
+    origin: `${process.env.SOCKET_CLIENT}`,
     methods: ['GET', 'POST'],
   },
 });
