@@ -69,6 +69,7 @@ io.on('connection', (socket) => {
       setTimeout(() => {
         io.in(channelId).emit('receive_message', {
           isSender: false,
+          isChatFinished: false,
           message:"Hi, there!",
           createdTime: Date.now(),
         });
@@ -87,12 +88,14 @@ io.on('connection', (socket) => {
 
     socket.to(channelId).emit('receive_message', {
       isSender: false,
+      isChatFinished: false,
       message,
       createdTime,
     });
 
     socket.emit('receive_message', {
       isSender: true,
+      isChatFinished: false,
       message,
       createdTime,
     });
@@ -127,6 +130,7 @@ io.on('connection', (socket) => {
 
     socket.to(channelId).emit('receive_message', {
       isSender: false,
+      isChatFinished: true,
       message:"I am leaving!",
       createdTime: Date.now(),
     });
@@ -149,6 +153,7 @@ io.on('connection', (socket) => {
 
       socket.to(chat.channelId).emit('receive_message', {
         isSender: false,
+        isChatFinished: true,
         message:"I am leaving!",
         createdTime: Date.now(),
       });

@@ -1,6 +1,7 @@
 import styles from './styles.module.css';
 import { useEffect, useRef, useState } from 'react';
 import receiveMessageSound from '../../assets/receive-message.mp3';
+import friendOfflineSound from '../../assets/friend-offline.mp3';
 
 const ReceivedMessage = ({ socket }) => {
   let [messagesReceived, setMessagesReceived] = useState([]);
@@ -10,7 +11,7 @@ const ReceivedMessage = ({ socket }) => {
   useEffect(() => {
     socket.on('receive_message', (data) => {
       if (!data.isSender) {
-        playMessageReceivedAudio();
+        playNotificationSound(data.isChatFinished ? friendOfflineSound : receiveMessageSound);
       }
       setMessagesReceived((state) => [
         ...state,
@@ -38,9 +39,9 @@ const ReceivedMessage = ({ socket }) => {
     messagesColumnRef.current.scrollTop = messagesColumnRef.current.scrollHeight;
   }, [messagesReceived]);
 
-  async function playMessageReceivedAudio() {
+  async function playNotificationSound(audioPath) {
     try {
-      const audio = new Audio(receiveMessageSound);
+      const audio = new Audio(audioPath);
       await audio.play();
     } catch (e) {
       console.log(e);
