@@ -1,13 +1,17 @@
 import styles from './styles.module.css';
 import { useEffect, useRef, useState } from 'react';
+import receiveMessageSound from '../../assets/receive-message.mp3';
 
 const ReceivedMessage = ({ socket }) => {
   let [messagesReceived, setMessagesReceived] = useState([]);
-
+  
   const messagesColumnRef = useRef(null);
 
   useEffect(() => {
     socket.on('receive_message', (data) => {
+      if (!data.isSender) {
+        playMessageReceivedAudio();
+      }
       setMessagesReceived((state) => [
         ...state,
         {
@@ -26,13 +30,22 @@ const ReceivedMessage = ({ socket }) => {
       const sortMessages = sortMessagesByDate(JSON.parse(messages));
       setMessagesReceived((state) => [...sortMessages,  ...state]);
     });
-
+    
     return () => socket.off('recent_messages');
   }, [socket]);
-
+  
   useEffect(() => {
     messagesColumnRef.current.scrollTop = messagesColumnRef.current.scrollHeight;
   }, [messagesReceived]);
+
+  async function playMessageReceivedAudio() {
+    try {
+      const audio = new Audio(receiveMessageSound);
+      await audio.play();
+    } catch (e) {
+      console.log(e);
+    }
+  }
 
   function sortMessagesByDate(messages) {
     return messages.sort(
