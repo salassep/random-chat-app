@@ -27,7 +27,7 @@ let chats = [];
 
 io.on('connection', (socket) => {
   const findFriend = () => {
-    let channelIdIndex = chats.findIndex((channel) => !channel.isReadyToChat);
+    let channelIdIndex = chats.reverse().findIndex((channel) => !channel.isReadyToChat);
   
     if (channelIdIndex < 0) {
       const channelId = nanoid();
@@ -37,7 +37,6 @@ io.on('connection', (socket) => {
         channelId,
         isReadyToChat,
         users: [socket.id],
-        messages: []
       });
   
       socket.join(channelId);
@@ -73,7 +72,7 @@ io.on('connection', (socket) => {
           message:"Hi, there!",
           createdTime: Date.now(),
         });
-      }, 2000);
+      }, 1500);
     }
   };
 
@@ -99,8 +98,50 @@ io.on('connection', (socket) => {
     });
   });
 
+  socket.on("skip", () => {
+    let channelId;
+    chats = chats.map((chat) => {
+      if (!chat.users.includes(socket.id)) {
+        return chat;
+      }
+
+      const users = chat.users.filter((user) => user !== socket.id);
+
+      if (users.length > 0) {
+        channelId = chat.channelId;
+  
+        return {
+          channelId,
+          isReadyToChat: false,
+          users,
+        }
+      }
+    }).filter((chat) => chat);
+
+    socket.emit('find_friend', {
+      channelId: channelId,
+      isReadyToChat: false,
+    });
+
+    socket.leave(channelId);
+
+    socket.to(channelId).emit('receive_message', {
+      isSender: false,
+      message:"I am leaving!",
+      createdTime: Date.now(),
+    });
+
+    setTimeout(() => {
+      socket.to(channelId).emit('find_friend', {
+        channelId: channelId,
+        isReadyToChat: false,
+      });
+  
+      findFriend();
+    }, 1500)
+  });
+
   socket.on("disconnect", () => {
-    console.log(socket.id, "disconnected")
     chats = chats.map((chat) => {
       if (!chat.users.includes(socket.id)) {
         return chat;
@@ -119,14 +160,14 @@ io.on('connection', (socket) => {
             isReadyToChat: false,
           });
           resolve();
-        }, 3000)
+        }, 1500)
       );
 
       delayedFunction().then(() => {
         setTimeout(() => {
-          socket.to(chat.channelId).emit("skipped");
+          socket.to(chat.channelId).emit("friend_offline");
           socket.leave(chat.channelId);
-        }, 3000);
+        }, 1500);
       });
 
     }).filter((chat) => chat);

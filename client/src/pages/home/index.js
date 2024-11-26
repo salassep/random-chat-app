@@ -11,15 +11,19 @@ const Home = ({socket}) => {
       setFriend(data);
     });
 
-    socket.on('skipped', () => {
+    socket.on('friend_offline', () => {
       socket.emit("refind_friend");
     });
 
     return () => {
       socket.off('find_friend');
-      socket.off('skipped');
+      socket.off('friend_offline');
     };
   }, [socket]);
+
+  const skipChat = () => {
+    socket.emit('skip');
+  };
 
   return (
     <div>
@@ -30,6 +34,9 @@ const Home = ({socket}) => {
               socket={socket}
               channelId={friend.channelId}
             />
+            <button onClick={skipChat} className={styles.skipBtn}>
+              Skip Chat
+            </button>
           </div> 
         : <div className={styles.centerInformation}>
             <span className={styles.textInformation}>Looking For Friend ...</span>

@@ -98,3 +98,21 @@
 .cautionText p {
   margin: 0;
 }
+
+.skipBtn {
+  display: block;
+  margin: auto;
+  margin-top: 16px;
+  background-color: white;
+  outline: none;
+  border: none;
+  color: rgb(56, 56, 56);
+  cursor: pointer;
+  font-weight: 500;
+  text-decoration: underline;
+  font-size: 16px;
+}
+
+.skipBtn:hover {
+  color: #7293ff;
+}
