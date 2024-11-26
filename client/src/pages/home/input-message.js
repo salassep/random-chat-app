@@ -34,7 +34,7 @@ const SendMessage = ({socket, channelId}) => {
           className={styles.messageInput}
           placeholder='Message...'
           onChange={(e) => setMessage(e.target.value)}
-          value={message}
+          value={message || ''}
           onKeyDown={onKeyDownHandler}
         />
         <button className='btn btn-primary' onClick={sendMessage}>
