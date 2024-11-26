@@ -21,17 +21,17 @@ const SendMessage = ({socket, channelId}) => {
 
   return (
     <div className={styles.sendMessageContainer}>
-    <input 
-      className={styles.messageInput}
-      placeHolder='Message...'
-      onChange={(e) => setMessage(e.target.value)}
-      value={message}
-      onKeyDown={onKeyDownHandler}
-    />
-    <button className='btn btn-primary' onClick={sendMessage}>
-      {'>'}
-    </button>
-  </div>
+      <input 
+        className={styles.messageInput}
+        placeholder='Message...'
+        onChange={(e) => setMessage(e.target.value)}
+        value={message}
+        onKeyDown={onKeyDownHandler}
+      />
+      <button className='btn btn-primary' onClick={sendMessage}>
+        {'>'}
+      </button>
+    </div>
   );
 };
 

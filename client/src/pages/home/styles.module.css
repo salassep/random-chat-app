@@ -68,14 +68,18 @@
 }
 
 .sendMessageContainer button {
-  width: 5%;
+  width: 56px;
 }
 
 .messageInput {
   padding: 14px;
-  width: 95%;
+  width: 100%;
   margin-right: 10px;
   border-radius: 6px;
   border: 1px solid rgb(153, 217, 234);
   font-size: 0.9rem;
+}
+
+.messageInput:focus {
+  outline-color: #7293ff;
 }
