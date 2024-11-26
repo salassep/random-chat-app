@@ -44,7 +44,7 @@ const ReceivedMessage = ({ socket }) => {
     <div ref={messagesColumnRef} className={styles.chatContainer}>
       <div className={styles.messagesColumn}>
         {messagesReceived.map((msg, i) => (
-          <div className={styles.message + " " + (msg.isSender ? "" : styles.messageReceived)} key={i}>
+          <div className={styles.message + " " + (msg.isSender ? styles.yourMessage : "")} key={i}>
             <p className={styles.msgText}>{msg.message}</p>
           </div>
         ))}
