@@ -24,20 +24,16 @@ To set up the environment variables, create a new file named `.env` in the root 
 
 #### Front End Environment Variables
 In the **/client**
-* REACT_APP_SOCKET_HOST='localhost'
-  * is the host of the socket server, default is **localhost**
-* REACT_APP_SOCKET_PORT=4000
-  * is the port of the socket server, default is **4000**
+* REACT_APP_SOCKET_HOST="http://localhost:4000"
+  * is the host of the socket server.
 * PORT=3000
   * is the port for react app, default is **3000**
 
 #### Back End Environment Variables
 In the **/server**
-* SOCKET_CLIENT='localhost'
-  * is the client that will connect to the server, default is **localhost**
-* SOCKET_CLIENT_PORT=3000
-  * is the client port that will connect to the server, default is **3000**
-* PORT=3000
+* SOCKET_CLIENT="http://localhost:3000"
+  * is the client that will connect to the server.
+* PORT=4000
   * is the port for express app, default is **4000**
 
 ### Running the Development
